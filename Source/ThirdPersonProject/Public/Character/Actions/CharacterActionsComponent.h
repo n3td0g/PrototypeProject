@@ -26,6 +26,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool StopAction(EActionType ActionType);
 
+    UFUNCTION(BlueprintCallable)
+    UBaseAction* GetPrevAction();
+
 	bool StopCurrentAction();
 
 	FORCEINLINE UBaseAction* GetCurrentAction() { return CurrentAction; }
@@ -42,13 +45,19 @@ protected:
 	TArray<TSubclassOf<UBaseAction>> CharacterActionClasses;
 
     UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = Actions)
-    float ActionMemoryTime = 0.75f;
+    float NextActionMemoryTime = 0.75f;
+
+    UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = Actions)
+    float PrevActionMemoryTime = 0.75f;
 
 	UPROPERTY(BlueprintReadOnly)
 	TMap<EActionType, UBaseAction*> CharacterActions;
 
 	UPROPERTY(BlueprintReadOnly)
 	UBaseAction* CurrentAction;
+
+    UPROPERTY(BlueprintReadOnly)
+    UBaseAction* PrevAction;
 
 private:
 	void CreateActions();
@@ -57,5 +66,7 @@ private:
     TArray<UBaseAction*> ActionsToTick;
 
     EActionType NextAction = EActionType::None;
+
     float NextActionActivationTime;
+    float PrevActionTime;
 };

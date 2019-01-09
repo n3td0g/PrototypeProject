@@ -25,13 +25,7 @@ public:
 	float BaseLookUpRate;
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Run)
-    float SpeedForJump;
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Run)
     float TimeToRoll;
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Run)
-    float MinCosToJump = 0.75f;
 
 protected:
 	void MoveForward(float Value);

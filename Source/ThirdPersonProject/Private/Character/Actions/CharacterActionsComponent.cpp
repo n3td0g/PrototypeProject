@@ -21,7 +21,7 @@ void UCharacterActionsComponent::TickComponent(float DeltaTime, ELevelTick TickT
         {
             EActionType NewActionType = NextAction;
             NextAction = EActionType::None;
-            if (GetWorld()->TimeSeconds - NextActionActivationTime < ActionMemoryTime)
+            if (GetWorld()->TimeSeconds - NextActionActivationTime < NextActionMemoryTime)
             {
                 StartAction(NewActionType);
             }
@@ -91,6 +91,18 @@ bool UCharacterActionsComponent::StopAction(EActionType ActionType)
 	return false;
 }
 
+UBaseAction* UCharacterActionsComponent::GetPrevAction()
+{
+    if (PrevAction)
+    {
+        if (GetWorld()->TimeSeconds - PrevActionTime > NextActionMemoryTime)
+        {
+            PrevAction = nullptr;
+        }
+    }
+    return PrevAction;
+}
+
 bool UCharacterActionsComponent::StopCurrentAction()
 {
 	if (IsValid(CurrentAction))
@@ -118,6 +130,9 @@ void UCharacterActionsComponent::OnStopAction(UBaseAction* Action)
             {
                 ActionsToTick.Remove(CurrentAction);
             }
+
+            PrevAction = CurrentAction;
+            PrevActionTime = GetWorld()->TimeSeconds;
 		}
 
 		CurrentAction = nullptr;

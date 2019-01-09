@@ -8,7 +8,7 @@
 
 URunAction::URunAction()
 {
-    bTickOnlyIfActive = false;
+    bTickOnlyIfActive = true;
     Type = EActionType::Run;
 }
 
@@ -18,7 +18,7 @@ void URunAction::Init()
 
 	if (IsValid(OwnerCharacter))
 	{
-        TargetSpeed = DefaultWalkSpeed = OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed;
+        DefaultWalkSpeed = OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed;
 	}
 }
 
@@ -31,17 +31,18 @@ void URunAction::ActionTick(float DeltaTime)
 		return;
 	}
 
-    if (bIsActive)
+    const FVector& LastControlInputVector = OwnerCharacter->GetLastMovementInputVector();
+    const FVector& ControllerInputNormal = LastControlInputVector.GetSafeNormal();
+    float MovementSpeed = FVector::DotProduct(OwnerCharacter->GetVelocity(), ControllerInputNormal);
+    bIsRunning = MovementSpeed > MinRunSpeed;
+
+    if (bIsRunning)
     {
         if (!OwnerCharacter->GetStatsComponent()->TryToChangeStatValue(EStatsType::Stamina, -StaminaPerSecond * DeltaTime))
         {
             StopAction(true);
         }
     }
-
-    float& MaxWalkSpeed = OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed;
-    float InterpolationSpeed = TargetSpeed > MaxWalkSpeed ? AccelerationSpeed : DecelerationSpeed;
-    MaxWalkSpeed = FMath::FInterpTo(MaxWalkSpeed, TargetSpeed, DeltaTime, InterpolationSpeed);
 }
 
 bool URunAction::Activate()
@@ -55,7 +56,7 @@ bool URunAction::Activate()
 	{   
         if (Super::Activate())
         {
-            TargetSpeed = RunSpeed;
+            OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
             return true;
         }		
 	}
@@ -67,7 +68,7 @@ bool URunAction::StopAction(bool bIsForce)
 {
 	if (Super::StopAction(bIsForce))
 	{
-        TargetSpeed = DefaultWalkSpeed;		
+        OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed = DefaultWalkSpeed;
 		return true;
 	}
 

@@ -25,6 +25,9 @@ public:
 
 	virtual bool StopAction(bool bIsForce) override;
 
+    UFUNCTION(BlueprintPure)
+    bool GetIsRunnning() { return bIsRunning; }
+
 protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Run)
 	float StaminaPerSecond = 100.0f;
@@ -36,13 +39,12 @@ protected:
 	float RunSpeed = 700.0f;
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Run)
-    float AccelerationSpeed = 15.0f;
+    float MinRunSpeed = 650.0f;
 
-    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Run)
-    float DecelerationSpeed = 30.0f;
+protected:
+    UPROPERTY(BlueprintReadOnly)
+    bool bIsRunning;
 
 private:	
-	float DefaultWalkSpeed;
-    float TargetSpeed;
-    float InterpolationSpeed;
+    float DefaultWalkSpeed;   
 };

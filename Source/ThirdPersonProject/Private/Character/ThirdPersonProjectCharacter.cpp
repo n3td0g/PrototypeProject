@@ -7,6 +7,7 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "CharacterActionsComponent.h"
+#include "RunAction.h"
 
 AThirdPersonProjectCharacter::AThirdPersonProjectCharacter()
 {
@@ -79,17 +80,16 @@ void AThirdPersonProjectCharacter::RunButtonPressed()
     }
     else
     {
-        FVector ControllerInputNormal = LastControlInputVector.GetSafeNormal();
-        bool bRunToForward = FVector::DotProduct(ControllerInputNormal, GetActorForwardVector()) > MinCosToJump;
-        if (GetCharacterMovement()->MaxWalkSpeed > SpeedForJump && bRunToForward)
+        if (auto RunAction = Cast<URunAction>(ActionComponent->GetPrevAction()))
         {
-            ActionComponent->StartAction(EActionType::Jump);
+            if (RunAction->GetIsRunnning())
+            {
+                ActionComponent->StartAction(EActionType::Jump);
+                return;
+            }
         }
-        else
-        {
-            ActionComponent->StartAction(EActionType::Run);
-            LastRunInputTime = GetWorld()->TimeSeconds;
-        }
+        ActionComponent->StartAction(EActionType::Run);
+        LastRunInputTime = GetWorld()->TimeSeconds;
     }
 }
 
