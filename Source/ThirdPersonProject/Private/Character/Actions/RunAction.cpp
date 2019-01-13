@@ -31,6 +31,15 @@ void URunAction::ActionTick(float DeltaTime)
 		return;
 	}
 
+    if (OwnerCharacter->GetCharacterMovement())
+    {
+        if (OwnerCharacter->GetCharacterMovement()->IsFalling())
+        {
+            bIsRunning = false;
+            return;
+        }
+    }
+
     const FVector& LastControlInputVector = OwnerCharacter->GetLastMovementInputVector();
     const FVector& ControllerInputNormal = LastControlInputVector.GetSafeNormal();
     float MovementSpeed = FVector::DotProduct(OwnerCharacter->GetVelocity(), ControllerInputNormal);

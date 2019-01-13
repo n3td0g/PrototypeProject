@@ -32,6 +32,11 @@ public:
 	bool StopCurrentAction();
 
 	FORCEINLINE UBaseAction* GetCurrentAction() { return CurrentAction; }
+    FORCEINLINE EActionType GetNextActionType() { return NextAction; }
+
+public:
+    UPROPERTY(BlueprintAssignable)
+    FOnStopActionSignature OnActionStopped;
 
 protected:
 	// Called when the game starts

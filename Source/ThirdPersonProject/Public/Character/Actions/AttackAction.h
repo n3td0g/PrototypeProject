@@ -26,4 +26,8 @@ protected:
 protected:
     UPROPERTY(BlueprintReadOnly)
     class ABaseWeapon* CurrentWeapon;
+
+private:
+
+    bool IsOnRunAttack();
 };

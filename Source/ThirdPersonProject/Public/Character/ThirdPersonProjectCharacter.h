@@ -36,6 +36,7 @@ protected:
 
     void RunButtonPressed();
     void RunButtonReleased();
+
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
