@@ -69,7 +69,7 @@ public:
     UFUNCTION(BlueprintCallable)
     bool TryToChangeStatValue(EStatsType Type, float Delta);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintPure)
 	FStatData& GetStatData(EStatsType Type);
 
 	UFUNCTION(BlueprintPure)

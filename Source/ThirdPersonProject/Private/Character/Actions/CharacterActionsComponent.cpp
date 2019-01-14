@@ -10,9 +10,9 @@ void UCharacterActionsComponent::TickComponent(float DeltaTime, ELevelTick TickT
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-    for (auto ActionToTick : ActionsToTick)
+    for (int32 I = ActionsToTick.Num() - 1; I >= 0; --I)
     {
-        ActionToTick->ActionTick(DeltaTime);
+        ActionsToTick[I]->ActionTick(DeltaTime);
     }
 
     if (!CurrentAction)
@@ -125,6 +125,7 @@ void UCharacterActionsComponent::OnStopAction(UBaseAction* Action)
 	{
 		if (IsValid(CurrentAction))
 		{
+            OnActionStopped.Broadcast(CurrentAction);
 			CurrentAction->OnStopAction.RemoveDynamic(this, &UCharacterActionsComponent::OnStopAction);
             if (CurrentAction->GetTickOnlyIfActive())
             {

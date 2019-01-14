@@ -38,6 +38,8 @@ AThirdPersonProjectCharacter::AThirdPersonProjectCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
+
+    ActionComponent->OnActionStopped.AddDynamic(this, &AThirdPersonProjectCharacter::OnActionStopped);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -59,6 +61,23 @@ void AThirdPersonProjectCharacter::SetupPlayerInputComponent(class UInputCompone
     PlayerInputComponent->BindAction("Run", EInputEvent::IE_Released, this, &AThirdPersonProjectCharacter::RunButtonReleased);
 }
 
+void AThirdPersonProjectCharacter::OnActionStopped(UBaseAction* CurrentAction)
+{
+    if(!bIsRunButtonPressed)
+    {
+        return;
+    }
+    if (!IsValid(CurrentAction))
+    {
+        return;
+    }
+
+    if (CurrentAction->GetActionType() != EActionType::Run)
+    {
+        ActionComponent->StartAction(EActionType::Run);
+    }
+}
+
 void AThirdPersonProjectCharacter::TurnAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
@@ -74,6 +93,7 @@ void AThirdPersonProjectCharacter::LookUpAtRate(float Rate)
 void AThirdPersonProjectCharacter::RunButtonPressed()
 {
     const float Epsilon = 0.00001f;
+    bIsRunButtonPressed = true;
     if (LastControlInputVector.SizeSquared() < Epsilon)
     {
         ActionComponent->StartAction(EActionType::Backstep);
@@ -95,6 +115,7 @@ void AThirdPersonProjectCharacter::RunButtonPressed()
 
 void AThirdPersonProjectCharacter::RunButtonReleased()
 {
+    bIsRunButtonPressed = false;
     if (ActionComponent->StopAction(EActionType::Run))
     {
         if (GetWorld()->TimeSeconds - LastRunInputTime < TimeToRoll)

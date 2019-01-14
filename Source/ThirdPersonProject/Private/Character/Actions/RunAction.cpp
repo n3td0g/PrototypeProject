@@ -38,11 +38,10 @@ void URunAction::ActionTick(float DeltaTime)
             bIsRunning = false;
             return;
         }
-    }
-
-    const FVector& LastControlInputVector = OwnerCharacter->GetLastMovementInputVector();
-    const FVector& ControllerInputNormal = LastControlInputVector.GetSafeNormal();
-    float MovementSpeed = FVector::DotProduct(OwnerCharacter->GetVelocity(), ControllerInputNormal);
+    }    
+   /* const FVector& LastControlInputVector = OwnerCharacter->GetLastMovementInputVector();
+    const FVector& ControllerInputNormal = LastControlInputVector.GetSafeNormal();*/
+    float MovementSpeed = FVector::DotProduct(OwnerCharacter->GetVelocity(), OwnerCharacter->GetActorForwardVector());
     bIsRunning = MovementSpeed > MinRunSpeed;
 
     if (bIsRunning)

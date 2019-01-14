@@ -6,6 +6,8 @@
 #include "BaseCharacter.h"
 #include "ThirdPersonProjectCharacter.generated.h"
 
+class UBaseAction;
+
 UCLASS(config=Game)
 class AThirdPersonProjectCharacter : public ABaseCharacter
 {
@@ -50,6 +52,12 @@ protected:
     class UCameraComponent* FollowCamera;
 
 private:
-    float LastRunInputTime;
+    UFUNCTION()
+    void OnActionStopped(UBaseAction* CurrentAction);
+
+private:
+    //Inpit
+    float LastRunInputTime = 0.0f;
+    bool bIsRunButtonPressed = false;
 };
 

@@ -29,6 +29,7 @@ public:
     UFUNCTION(BlueprintCallable)
     UBaseAction* GetPrevAction();
 
+    UFUNCTION(BlueprintCallable)
 	bool StopCurrentAction();
 
 	FORCEINLINE UBaseAction* GetCurrentAction() { return CurrentAction; }
@@ -68,10 +69,11 @@ private:
 	void CreateActions();
 
 private:
+    UPROPERTY(Transient)
     TArray<UBaseAction*> ActionsToTick;
 
     EActionType NextAction = EActionType::None;
 
-    float NextActionActivationTime;
-    float PrevActionTime;
+    float NextActionActivationTime = 0.0f;
+    float PrevActionTime = 0.0f;
 };
