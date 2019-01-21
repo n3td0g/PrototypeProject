@@ -10,6 +10,15 @@ bool UBaseAction::HasHigherPriority(EActionType PrevActionType)
 	return TEST_BIT(ActionsThatCanBeBraked, PrevActionType);
 }
 
+UWorld* UBaseAction::GetWorld() const
+{
+    if (IsValid(OwnerCharacter))
+    {
+        return OwnerCharacter->GetWorld();
+    }
+    return nullptr;
+}
+
 void UBaseAction::Init()
 {
 	ReceiveInit();
@@ -49,6 +58,11 @@ bool UBaseAction::StopAction(bool bIsForce)
 bool UBaseAction::ReceiveStopAction_Implementation(bool bIsForce)
 {
 	return true;
+}
+
+bool UBaseAction::ContinueAction()
+{
+    return false;
 }
 
 void UBaseAction::SetOwner(AActor* Owner)

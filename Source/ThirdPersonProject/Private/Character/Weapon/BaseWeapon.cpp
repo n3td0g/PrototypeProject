@@ -10,8 +10,6 @@ ABaseWeapon::ABaseWeapon()
     {
         WeaponAnimations.Add((EAttackType)I, FWeaponAnimations());
     }
-
-    
 }
 
 void ABaseWeapon::Tick(float DeltaTime)
@@ -45,12 +43,13 @@ void ABaseWeapon::StopAttack()
     ReceiveStopAttack();
 }
 
-UAnimMontage* ABaseWeapon::GetAttackMontage(EAttackType AttackType)
+UAnimMontage* ABaseWeapon::GetAttackMontage(EAttackType AttackType, int32& NumOfCombo)
 {
     if (auto Result = WeaponAnimations.Find(AttackType))
     {
         if (Result->AttackAnimation)
         {
+            NumOfCombo = Result->NumOfCombo;
             return Result->AttackAnimation;
         }
     }

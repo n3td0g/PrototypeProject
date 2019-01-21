@@ -44,6 +44,7 @@ class THIRDPERSONPROJECT_API UBaseAction : public UObject
 public:
 	bool HasHigherPriority(EActionType PrevActionType);
 
+    virtual UWorld* GetWorld() const override;
 	virtual void Init();
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Init"))
@@ -63,6 +64,8 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, meta = (DisplayName = "StopAction"))
 	bool ReceiveStopAction(bool bIsForce);
+
+    virtual bool ContinueAction();
 
 	void SetOwner(AActor* Owner);
 

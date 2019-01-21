@@ -24,12 +24,9 @@ bool UBaseMontageAction::Activate()
 
     if (IsValid(OwnerCharacter))
     {
-        if (RequiredStamina > 0.0f)
+        if (!TryToSpendStamind())
         {
-            if (!OwnerCharacter->GetStatsComponent()->TryToChangeStatValue(EStatsType::Stamina, -RequiredStamina))
-            {
-                return false;
-            }
+            return false;
         }
 
         if (Super::Activate())
@@ -39,8 +36,8 @@ bool UBaseMontageAction::Activate()
                 CharacterAnimInstance->OnStartActionEvent.AddDynamic(this, &UBaseMontageAction::StartAnimationEventBinding);
                 CharacterAnimInstance->OnStopActionEvent.AddDynamic(this, &UBaseMontageAction::StopAnimationEventBinding);
             }
-
-            OwnerCharacter->PlayAnimMontage(CurrentMontage);
+            
+            OwnerCharacter->PlayAnimMontage(CurrentMontage, 1.0f, SectionName);
             return true;
         }
     }
@@ -80,4 +77,17 @@ void UBaseMontageAction::StartAnimationEventBinding()
 void UBaseMontageAction::StopAnimationEventBinding()
 {
     StopAnimationEvent();
+}
+
+bool UBaseMontageAction::TryToSpendStamind()
+{
+    if (RequiredStamina > 0.0f)
+    {
+        if (!OwnerCharacter->GetStatsComponent()->TryToChangeStatValue(EStatsType::Stamina, -RequiredStamina))
+        {
+            return false;
+        }
+    }
+
+    return true;
 }

@@ -107,6 +107,14 @@ bool UCharacterActionsComponent::StopCurrentAction()
 {
 	if (IsValid(CurrentAction))
 	{
+        if (CurrentAction->GetActionType() == NextAction)
+        {
+            if (CurrentAction->ContinueAction())
+            {
+                return true;
+            }
+        }
+
 		return CurrentAction->StopAction(false);
 	}
 	return false;

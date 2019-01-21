@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BaseWeapon.h"
 #include "Character/Actions/BaseMontageAction.h"
 #include "AttackAction.generated.h"
 
@@ -17,17 +18,26 @@ class THIRDPERSONPROJECT_API UAttackAction : public UBaseMontageAction
 public:
     UAttackAction();
 	
+    virtual bool ContinueAction() override;
     virtual bool Activate() override;
+    virtual bool StopAction(bool bIsForce) override;
 
 protected:
     virtual void StartAnimationEvent() override;
     virtual void StopAnimationEvent() override;
 
 protected:
+    UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Combo)
+    FString ComboNamePrefix = TEXT("Combo_");
+
     UPROPERTY(BlueprintReadOnly)
     class ABaseWeapon* CurrentWeapon;
 
 private:
-
-    bool IsOnRunAttack();
+    EAttackType GetAttackType() const;
+    bool IsOnRunAttack() const;
+private:
+    //Combo
+    int32 ComboIndex = 0;
+    EAttackType PrevAttackType = EAttackType::None;
 };

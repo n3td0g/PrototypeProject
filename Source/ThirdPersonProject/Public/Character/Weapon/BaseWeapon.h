@@ -14,7 +14,8 @@ enum class EAttackType : uint8
     Default,
     AfterRun,
     OnFalling,
-    Count UMETA(Hidden)
+    Count UMETA(Hidden),
+    None  UMETA(Hidden)
 };
 
 USTRUCT(BlueprintType)
@@ -25,6 +26,9 @@ struct FWeaponAnimations
 public:
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Animation)
     UAnimMontage* AttackAnimation;
+
+    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Animation, meta = (ClampMin = "1", ClampMax = "100"))
+    int32 NumOfCombo = 1;
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Animation)
     UAnimMontage* HeavyAttackAnimation;
@@ -58,7 +62,7 @@ public:
     void ReceiveStopAttack();
 
     UFUNCTION(BlueprintCallable)
-    UAnimMontage* GetAttackMontage(EAttackType AttackType);
+    UAnimMontage* GetAttackMontage(EAttackType AttackType, int32& NumOfCombo);
 
 protected:
     virtual void BeginPlay() override;

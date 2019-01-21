@@ -2,8 +2,8 @@
 
 #include "AttackAction.h"
 #include "CharacterActionsComponent.h"
+#include "CharacterAnimInstance.h"
 #include "BaseCharacter.h"
-#include "BaseWeapon.h"
 #include "RunAction.h"
 
 UAttackAction::UAttackAction()
@@ -12,20 +12,70 @@ UAttackAction::UAttackAction()
     Type = EActionType::Attack;
 }
 
+bool UAttackAction::ContinueAction()
+{
+    if (!CharacterAnimInstance)
+    {
+        return false;
+    }
+
+    EAttackType AttackType = GetAttackType();
+    if (AttackType != PrevAttackType)
+    {
+        return false;
+    }
+
+    int32 NumOfCombo = 1;
+    CurrentMontage = CurrentWeapon->GetAttackMontage(AttackType, NumOfCombo);
+    if (NumOfCombo <= 1)
+    {
+        return false;
+    }
+    if (!CurrentMontage)
+    {
+        return false;
+    }
+
+    ComboIndex = (ComboIndex + 1) % NumOfCombo;
+    if (ComboIndex == 0)
+    {
+        return false;
+    }
+
+    if (!TryToSpendStamind())
+    {
+        return false;
+    }
+
+    FName NewSection = *FString::Printf(TEXT("%s%d"), *ComboNamePrefix, ComboIndex);
+    FName NextSection = *FString::Printf(TEXT("%s%d"), *ComboNamePrefix, ComboIndex + 1);
+
+    CharacterAnimInstance->Montage_SetNextSection(NewSection, NextSection, CurrentMontage);
+
+    return true;
+}
+
 bool UAttackAction::Activate()
 {
     CurrentWeapon = OwnerCharacter->GetCurrentWeapon();
     if (IsValid(CurrentWeapon))
     {
-        EAttackType AttackType = EAttackType::Default;
-
-        if (IsOnRunAttack())
-        {
-            AttackType = EAttackType::AfterRun;
-        }
-
-        CurrentMontage = CurrentWeapon->GetAttackMontage(AttackType);
+        EAttackType AttackType = GetAttackType();
+        int32 NumOfCombo = 1;
+        CurrentMontage = CurrentWeapon->GetAttackMontage(AttackType, NumOfCombo);
+        PrevAttackType = AttackType;
         return Super::Activate();
+    }
+    return false;
+}
+
+bool UAttackAction::StopAction(bool bIsForce)
+{
+    if (Super::StopAction(bIsForce))
+    {
+        SectionName = NAME_None;        
+        ComboIndex = 0;
+        return true;
     }
     return false;
 }
@@ -44,7 +94,16 @@ void UAttackAction::StopAnimationEvent()
     CurrentWeapon->StopAttack();
 }
 
-bool UAttackAction::IsOnRunAttack()
+EAttackType UAttackAction::GetAttackType() const
+{
+    if (IsOnRunAttack())
+    {
+        return EAttackType::AfterRun;
+    }
+    return EAttackType::Default;
+}
+
+bool UAttackAction::IsOnRunAttack() const
 {
     if (auto PrevAction = OwnerCharacter->GetActionComponent()->GetPrevAction())
     {

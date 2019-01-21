@@ -31,9 +31,14 @@ protected:
     UFUNCTION()
     void StopAnimationEventBinding();
 
+    bool TryToSpendStamind();
+
 protected:
     UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = Montage)
     class UAnimMontage* CurrentMontage;
+
+    UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = Montage)
+    FName SectionName = NAME_None;
 
     UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = Montage)
     float RequiredStamina = -100.0f;
