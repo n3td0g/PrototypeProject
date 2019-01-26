@@ -54,7 +54,10 @@ bool UCharacterActionsComponent::StartAction(EActionType NewActionType)
 			return false;
 		}
 
-		CurrentAction->StopAction(true);
+        if (!CurrentAction->StopAction(true))
+        {
+            return false;
+        }
 	}
 
 	if (NewAction->Activate())

@@ -46,6 +46,11 @@ bool UBaseAction::ReceiveActivate_Implementation()
 
 bool UBaseAction::StopAction(bool bIsForce)
 {
+    if (!bIsForce && !CanBeStopped())
+    {
+        return false;
+    }
+
 	if (ReceiveStopAction(bIsForce))
 	{
 		OnStopAction.Broadcast(this);
@@ -76,4 +81,9 @@ FString UBaseAction::GetActionTypeAsString(EActionType ActionType)
 	if (!EnumPtr) return FString("Invalid");
 
 	return EnumPtr->GetNameByValue((int64)ActionType).ToString();
+}
+
+bool UBaseAction::CanBeStopped()
+{
+    return true;
 }

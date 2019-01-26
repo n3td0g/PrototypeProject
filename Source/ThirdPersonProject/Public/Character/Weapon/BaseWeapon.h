@@ -32,6 +32,12 @@ public:
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Animation)
     UAnimMontage* HeavyAttackAnimation;
+
+    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Animation)
+    bool bUseControllerRotation = false;
+
+    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Damage)
+    float Damage = 20.0f;
 };
 
 UCLASS(BlueprintType, Blueprintable)
@@ -53,7 +59,7 @@ public:
     UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, meta = (DisplayName = "Unequip"))
     void ReceiveUnequip(USceneComponent* ComponentAttachTo);
 
-    virtual void StartAttack();
+    virtual void StartAttack(EAttackType AttackType);
     UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, meta = (DisplayName = "OnStartAttack"))
     void ReceiveStartAttack();
 
@@ -78,4 +84,6 @@ protected:
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere, EditFixedSize, Category = Anumation)
     TMap<EAttackType, FWeaponAnimations> WeaponAnimations;
+
+    FWeaponAnimations *CurrentWeaponAnimation = nullptr;
 };

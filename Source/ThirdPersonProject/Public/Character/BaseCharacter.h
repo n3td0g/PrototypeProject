@@ -19,6 +19,7 @@ public:
 	ABaseCharacter();
 
 public:
+    virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	virtual void Tick(float DeltaTime) override;
 
 	FORCEINLINE UCharacterActionsComponent* GetActionComponent() { return ActionComponent;  }

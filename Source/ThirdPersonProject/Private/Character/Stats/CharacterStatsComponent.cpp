@@ -8,6 +8,7 @@ UCharacterStatsComponent::UCharacterStatsComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
+    bIsActive = true;
 
 	for (uint8 I = 0; I < (uint8)EStatsType::Count; ++I)
 	{
@@ -21,6 +22,10 @@ UCharacterStatsComponent::UCharacterStatsComponent()
 void UCharacterStatsComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+    if (!bIsActive)
+    {
+        return;
+    }
 
 	float WorldTime = GetWorld()->GetTimeSeconds();
 	for (int32 I = StatsToRecovery.Num() - 1; I >= 0 ; --I)
@@ -55,10 +60,11 @@ void UCharacterStatsComponent::AddToRecoveryList(FStatData& Data)
 	Data.RecoveryStartTime = GetWorld()->GetTimeSeconds() + Data.DelayBeforeRecovery;
 }
 
-void UCharacterStatsComponent::ChangeStatValue(EStatsType Type, float Delta)
+float UCharacterStatsComponent::ChangeStatValue(EStatsType Type, float Delta)
 {
 	FStatData& Data = GetStatData(Type);
     ChangeStatValue(Data, Delta);
+    return Data.Value;
 }
 
 void UCharacterStatsComponent::ChangeStatValue(FStatData& Data, float Delta)
@@ -72,6 +78,11 @@ void UCharacterStatsComponent::ChangeStatValue(FStatData& Data, float Delta)
 
 void UCharacterStatsComponent::ChangeStatDataValue(FStatData& Data, float Delta)
 {
+    if (!bIsActive)
+    {
+        return;
+    }
+
 	Data.Value = FMath::Clamp(Data.Value + Delta, Data.MinValue, Data.MaxValue);
 
 	if (Data.RecoverySpeed > 0.0f)
@@ -87,7 +98,7 @@ void UCharacterStatsComponent::ChangeStatDataValue(FStatData& Data, float Delta)
 bool UCharacterStatsComponent::TryToChangeStatValue(EStatsType Type, float Delta)
 {
     FStatData& Data = GetStatData(Type);
-    if (Data.Value > 0.0f)
+    if (Data.Value > Data.MinValue)
     {
         ChangeStatValue(Data, Delta);
         return true;

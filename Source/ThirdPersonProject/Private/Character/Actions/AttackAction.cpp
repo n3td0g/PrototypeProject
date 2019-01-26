@@ -20,7 +20,7 @@ bool UAttackAction::ContinueAction()
     }
 
     EAttackType AttackType = GetAttackType();
-    if (AttackType != PrevAttackType)
+    if (AttackType != CurrAttackType)
     {
         return false;
     }
@@ -63,7 +63,7 @@ bool UAttackAction::Activate()
         EAttackType AttackType = GetAttackType();
         int32 NumOfCombo = 1;
         CurrentMontage = CurrentWeapon->GetAttackMontage(AttackType, NumOfCombo);
-        PrevAttackType = AttackType;
+        CurrAttackType = AttackType;
         return Super::Activate();
     }
     return false;
@@ -84,7 +84,7 @@ void UAttackAction::StartAnimationEvent()
 {
     Super::StartAnimationEvent();
 
-    CurrentWeapon->StartAttack();
+    CurrentWeapon->StartAttack(CurrAttackType);
 }
 
 void UAttackAction::StopAnimationEvent()

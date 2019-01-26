@@ -39,5 +39,5 @@ private:
 private:
     //Combo
     int32 ComboIndex = 0;
-    EAttackType PrevAttackType = EAttackType::None;
+    EAttackType CurrAttackType = EAttackType::None;
 };

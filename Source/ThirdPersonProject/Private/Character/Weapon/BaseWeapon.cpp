@@ -5,6 +5,7 @@
 ABaseWeapon::ABaseWeapon()
 {
 	PrimaryActorTick.bCanEverTick = true;
+    PrimaryActorTick.bStartWithTickEnabled = false;
 
     for (uint8 I = 0; I < (uint8)EAttackType::Count; ++I)
     {
@@ -33,14 +34,18 @@ void ABaseWeapon::Unequip(USceneComponent* ComponentAttachTo)
     ReceiveUnequip(ComponentAttachTo);
 }
 
-void ABaseWeapon::StartAttack()
+void ABaseWeapon::StartAttack(EAttackType AttackType)
 {
+    CurrentWeaponAnimation = WeaponAnimations.Find(AttackType);
+
     ReceiveStartAttack();
 }
 
 void ABaseWeapon::StopAttack()
 {
     ReceiveStopAttack();
+
+    CurrentWeaponAnimation = nullptr;
 }
 
 UAnimMontage* ABaseWeapon::GetAttackMontage(EAttackType AttackType, int32& NumOfCombo)

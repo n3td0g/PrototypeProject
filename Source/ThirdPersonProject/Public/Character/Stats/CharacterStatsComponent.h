@@ -64,7 +64,7 @@ public:
 	void ChangeStatMaxValue(EStatsType Type, float NewMaxValue);
 
 	UFUNCTION(BlueprintCallable)
-	void ChangeStatValue(EStatsType Type, float Delta);
+	float ChangeStatValue(EStatsType Type, float Delta);
 
     UFUNCTION(BlueprintCallable)
     bool TryToChangeStatValue(EStatsType Type, float Delta);

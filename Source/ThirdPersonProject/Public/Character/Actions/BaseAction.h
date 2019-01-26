@@ -96,4 +96,7 @@ protected:
 
     UPROPERTY(BlueprintReadOnly)
     bool bIsActive;
+
+private:
+    virtual bool CanBeStopped();
 };

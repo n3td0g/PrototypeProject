@@ -13,6 +13,17 @@ ABaseCharacter::ABaseCharacter()
 	StatsComponent = CreateDefaultSubobject<UCharacterStatsComponent>("StatsComponent");
 }
 
+float ABaseCharacter::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+    float ActualDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+    
+    if (StatsComponent->ChangeStatValue(EStatsType::Health, -ActualDamage) <= 0.0f)
+    {
+        ActionComponent->StartAction(EActionType::Death);
+    }
+    return ActualDamage;
+}
+
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -26,6 +37,7 @@ ABaseWeapon* ABaseCharacter::GetCurrentWeapon()
         if (TestWeaponClass)
         {
             FActorSpawnParameters Params;
+            Params.Owner = this;
             Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
             TestWeapon = GetWorld()->SpawnActor<ABaseWeapon>(TestWeaponClass, Params);
             TestWeapon->Equip(GetMesh());
@@ -39,4 +51,5 @@ void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+    GetCurrentWeapon();
 }
