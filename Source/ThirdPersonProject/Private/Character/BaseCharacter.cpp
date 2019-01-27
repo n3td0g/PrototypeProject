@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BaseCharacter.h"
+#include "StartActionAsync.h"
 #include "CharacterActionsComponent.h"
 #include "CharacterStatsComponent.h"
 #include "BaseWeapon.h"

@@ -72,6 +72,7 @@ bool UCharacterActionsComponent::StartAction(EActionType NewActionType)
         if (!CurrentAction->GetIsActive())
         {
             StopCurrentAction();
+            return false;
         }
 	}
 	else
