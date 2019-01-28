@@ -4,33 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "ActionType.h"
 #include "BaseAction.generated.h"
 
 class ACharacter;
-
-UENUM(BlueprintType, meta = (Bitflags))
-enum class EActionType : uint8
-{
-	None,
-	Run,
-	Jump,
-	Backstep,
-	Roll,
-	Attack,
-	Kick,
-	UseSelectedItem,
-	UseSpell,
-	Backstab,
-	CriticalDamage,
-	Block,
-	Stagger,
-	StunLock,
-	Interact,
-	Death
-};
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStopActionSignature, UBaseAction*, Action);
-
 class ABaseCharacter;
 
 /**

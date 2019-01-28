@@ -1,4 +1,5 @@
 #include "CharacterActionsComponent.h"
+#include "BaseAction.h"
 
 UCharacterActionsComponent::UCharacterActionsComponent()
 {
