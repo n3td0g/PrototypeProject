@@ -48,6 +48,67 @@ ABaseWeapon* ABaseCharacter::GetCurrentWeapon()
     return TestWeapon;
 }
 
+//--------------Stats--------------
+void ABaseCharacter::ChangeStatMaxValue(EStatsType Type, float NewMaxValue)
+{
+    StatsComponent->ChangeStatMaxValue(Type, NewMaxValue);
+}
+
+float ABaseCharacter::ChangeStatValue(EStatsType Type, float Delta)
+{
+    return StatsComponent->ChangeStatValue(Type, Delta);
+}
+
+bool ABaseCharacter::TryToChangeStatValue(EStatsType Type, float Delta)
+{
+    return StatsComponent->TryToChangeStatValue(Type, Delta);
+}
+
+FStatData& ABaseCharacter::GetStatData(EStatsType Type)
+{
+    return StatsComponent->GetStatData(Type);
+}
+
+float ABaseCharacter::GetDataValue(EStatsType Type)
+{
+    return StatsComponent->GetDataValue(Type);
+}
+
+//------------------------------------
+//--------------Actions---------------
+
+bool ABaseCharacter::StartAction(EActionType NewActionType)
+{
+    return ActionComponent->StartAction(NewActionType);
+}
+
+bool ABaseCharacter::StopAction(EActionType ActionType)
+{
+    return ActionComponent->StopAction(ActionType);
+}
+
+UBaseAction* ABaseCharacter::GetPrevAction()
+{
+    return ActionComponent->GetPrevAction();
+}
+
+bool ABaseCharacter::StopCurrentAction()
+{
+    return ActionComponent->StopCurrentAction();
+}
+
+UBaseAction* ABaseCharacter::GetCurrentAction()
+{
+    return ActionComponent->GetCurrentAction();
+}
+
+EActionType ABaseCharacter::GetNextActionType()
+{
+    return ActionComponent->GetNextActionType();
+}
+
+//------------------------------------
+
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();

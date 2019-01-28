@@ -32,7 +32,10 @@ public:
     UFUNCTION(BlueprintCallable)
 	bool StopCurrentAction();
 
+    UFUNCTION(BlueprintPure)
 	FORCEINLINE UBaseAction* GetCurrentAction() { return CurrentAction; }
+
+    UFUNCTION(BlueprintPure)
     FORCEINLINE EActionType GetNextActionType() { return NextAction; }
 
 public:

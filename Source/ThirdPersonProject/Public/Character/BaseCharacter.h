@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "StatsType.h"
 #include "BaseCharacter.generated.h"
 
 class UCharacterActionsComponent;
@@ -27,6 +28,43 @@ public:
 
     UFUNCTION(BlueprintCallable)
     ABaseWeapon* GetCurrentWeapon();
+
+    //Stats
+    UFUNCTION(BlueprintCallable)
+    void ChangeStatMaxValue(EStatsType Type, float NewMaxValue);
+
+    UFUNCTION(BlueprintCallable)
+    float ChangeStatValue(EStatsType Type, float Delta);
+
+    UFUNCTION(BlueprintCallable)
+    bool TryToChangeStatValue(EStatsType Type, float Delta);
+
+    UFUNCTION(BlueprintPure)
+    FStatData& GetStatData(EStatsType Type);
+
+    UFUNCTION(BlueprintPure)
+    float GetDataValue(EStatsType Type);
+    //----------------------------------
+
+    //Actions
+    UFUNCTION(BlueprintCallable)
+    bool StartAction(EActionType NewActionType);
+
+    UFUNCTION(BlueprintCallable)
+    bool StopAction(EActionType ActionType);
+
+    UFUNCTION(BlueprintCallable)
+    UBaseAction* GetPrevAction();
+
+    UFUNCTION(BlueprintCallable)
+    bool StopCurrentAction();
+
+    UFUNCTION(BlueprintPure)
+    UBaseAction* GetCurrentAction();
+
+    UFUNCTION(BlueprintPure)
+    EActionType GetNextActionType();
+    //----------------------------------
 
 protected:
 	virtual void BeginPlay() override;
