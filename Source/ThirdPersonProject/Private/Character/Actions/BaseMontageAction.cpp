@@ -64,8 +64,9 @@ bool UBaseMontageAction::StopAction(bool bIsForce)
         {
             OwnerCharacter->StopAnimMontage(CurrentMontage);
         }
+
         return true;
-    }    
+    }
     return false;
 }
 
@@ -83,10 +84,7 @@ bool UBaseMontageAction::TryToSpendStamind()
 {
     if (RequiredStamina > 0.0f)
     {
-        if (!OwnerCharacter->GetStatsComponent()->TryToChangeStatValue(EStatsType::Stamina, -RequiredStamina))
-        {
-            return false;
-        }
+        return OwnerCharacter->GetStatsComponent()->TryToChangeStatValue(EStatsType::Stamina, -RequiredStamina);
     }
 
     return true;

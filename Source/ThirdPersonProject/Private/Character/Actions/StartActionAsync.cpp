@@ -31,14 +31,21 @@ void UStartActionAsync::Activate()
 
     if (ActionComponent->StartAction(ActionType))
     {
-        ActionComponent->OnActionStopped.AddDynamic(this, &UStartActionAsync::OnActionStopped);
+        ActionComponent->OnActionStopped.AddUniqueDynamic(this, &UStartActionAsync::OnActionStopped);
+        ActionComponent->OnBeforeStopAction.AddUniqueDynamic(this, &UStartActionAsync::OnBeforeStopAction);
     }
+}
+
+void UStartActionAsync::OnBeforeStopAction(UBaseAction* Action)
+{
+    OnBeforeStop.Broadcast();
 }
 
 void UStartActionAsync::OnActionStopped(UBaseAction* Action)
 {
-    auto ActionComponent = Character->GetActionComponent();
-    ActionComponent->OnActionStopped.RemoveDynamic(this, &UStartActionAsync::OnActionStopped);
+    auto ActionComponent = Character->GetActionComponent();    
+    ActionComponent->OnActionStopped.RemoveAll(this);
+    ActionComponent->OnBeforeStopAction.RemoveAll(this);
     OnSuccess.Broadcast();
 }
 

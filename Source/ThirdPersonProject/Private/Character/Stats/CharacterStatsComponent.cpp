@@ -98,7 +98,7 @@ void UCharacterStatsComponent::ChangeStatDataValue(FStatData& Data, float Delta)
 bool UCharacterStatsComponent::TryToChangeStatValue(EStatsType Type, float Delta)
 {
     FStatData& Data = GetStatData(Type);
-    if (Data.Value > Data.MinValue)
+    if (Data.Value > Data.CriticalValue)
     {
         ChangeStatValue(Data, Delta);
         return true;

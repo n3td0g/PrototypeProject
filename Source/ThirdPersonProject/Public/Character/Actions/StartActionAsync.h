@@ -25,11 +25,17 @@ public:
 	
 public:
     UPROPERTY(BlueprintAssignable)
+    FActionOutputPin OnBeforeStop;
+
+    UPROPERTY(BlueprintAssignable)
     FActionOutputPin OnSuccess;
 
     UPROPERTY(BlueprintAssignable)
     FActionOutputPin OnFailed;
 protected:
+    UFUNCTION()
+    void OnBeforeStopAction(UBaseAction* Action);
+
     UFUNCTION()
     void OnActionStopped(UBaseAction* Action);
 

@@ -112,8 +112,11 @@ bool UCharacterActionsComponent::StopCurrentAction()
 {
 	if (IsValid(CurrentAction))
 	{
+        OnBeforeStopAction.Broadcast(CurrentAction);
+
         if (CurrentAction->GetActionType() == NextAction)
         {
+            NextAction = EActionType::None;
             if (CurrentAction->ContinueAction())
             {
                 return true;

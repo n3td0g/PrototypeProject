@@ -2,6 +2,7 @@
 
 #include "MeleeWeapon.h"
 #include "DrawDebugHelpers.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 void AMeleeWeapon::StartAttack(EAttackType AttackType)
 {
@@ -12,8 +13,8 @@ void AMeleeWeapon::StartAttack(EAttackType AttackType)
         return;
     }
 
-    TraceParams = FCollisionQueryParams();
-    TraceParams.AddIgnoredActor(GetOwner());
+    ActorsToIgnore.Empty();
+    ActorsToIgnore.Add(GetOwner());
 
     UpdatePrevTracePoints();
     GetWorld()->GetTimerManager().SetTimer(TraceTimer, this, &AMeleeWeapon::Trace, TraceUpdateTime, true, TraceUpdateTime);
@@ -52,11 +53,12 @@ void AMeleeWeapon::Trace()
 
     for (auto ComponentToTrace : ComponentsToTrace)
     {
-        if (GetWorld()->LineTraceSingleByChannel(HitResult, ComponentToTrace->GetComponentLocation(), PrevTracePoint[Index++], ChannelToTrace, TraceParams))
+        EDrawDebugTrace::Type DebugTrace = bDebug ? EDrawDebugTrace::ForDuration : EDrawDebugTrace::None;
+        if(UKismetSystemLibrary::SphereTraceSingle(this, ComponentToTrace->GetComponentLocation(), PrevTracePoint[Index++], TraceRadius, 
+            ChannelToTrace, false, ActorsToIgnore, DebugTrace, HitResult, false, FLinearColor::Red))
         {
             if (bDebug)
             {
-                ::DrawDebugLine(GetWorld(), HitResult.TraceStart, HitResult.ImpactPoint, FColor::Green, false, 1.0f);
                 ::DrawDebugBox(GetWorld(), HitResult.TraceStart, FVector(5.0f, 5.0f, 5.0f), FColor::Blue);
             }
 
@@ -68,15 +70,8 @@ void AMeleeWeapon::Trace()
                 {
                     OwnerController = Pawn->GetController();
                 }
-                HitResult.GetActor()->TakeDamage(CurrentWeaponAnimation->Damage, DamageEvent, OwnerController, this);                
-                TraceParams.AddIgnoredActor(HitResult.GetActor());
-            }
-        }
-        else
-        {
-            if (bDebug)
-            {
-                ::DrawDebugLine(GetWorld(), HitResult.TraceStart, HitResult.TraceEnd, FColor::Red, false, 1.0f);
+                HitResult.GetActor()->TakeDamage(CurrentWeaponAnimation->Damage, DamageEvent, OwnerController, this);
+                ActorsToIgnore.Add(HitResult.GetActor());
             }
         }
     }

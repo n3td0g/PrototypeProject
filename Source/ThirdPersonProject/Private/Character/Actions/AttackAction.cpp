@@ -51,7 +51,7 @@ bool UAttackAction::ContinueAction()
     FName NextSection = *FString::Printf(TEXT("%s%d"), *ComboNamePrefix, ComboIndex + 1);
 
     CharacterAnimInstance->Montage_SetNextSection(NewSection, NextSection, CurrentMontage);
-
+    
     return true;
 }
 

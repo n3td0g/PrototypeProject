@@ -31,6 +31,9 @@ struct FStatData
     float MinValue = 0.0f;
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere)
+    float CriticalValue = 0.0f;
+
+    UPROPERTY(BlueprintReadOnly, EditAnywhere)
     float MaxValue = 100.0f;
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere)

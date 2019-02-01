@@ -35,7 +35,10 @@ protected:
     float TraceUpdateTime = 0.05f;
 
     UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Trace)
-    TEnumAsByte<ECollisionChannel> ChannelToTrace;
+    float TraceRadius = 5.0f;
+
+    UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Trace)
+    TEnumAsByte<ETraceTypeQuery> ChannelToTrace;
 
     UPROPERTY(BlueprintReadOnly)
     TArray<USceneComponent*> ComponentsToTrace;
@@ -46,5 +49,5 @@ private:
     FTimerHandle TraceTimer;
 
     TArray<FVector> PrevTracePoint;
-    FCollisionQueryParams TraceParams;
+    TArray<AActor*> ActorsToIgnore;
 };

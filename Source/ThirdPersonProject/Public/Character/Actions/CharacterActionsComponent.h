@@ -42,6 +42,9 @@ public:
     UPROPERTY(BlueprintAssignable)
     FOnStopActionSignature OnActionStopped;
 
+    UPROPERTY(BlueprintAssignable)
+    FOnBeforeStopActionSignature OnBeforeStopAction;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
