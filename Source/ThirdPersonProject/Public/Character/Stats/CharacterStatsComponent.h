@@ -7,6 +7,8 @@
 #include "StatsType.h"
 #include "CharacterStatsComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnStatValueChanged, float, NewValue, EStatsType, StatType);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class THIRDPERSONPROJECT_API UCharacterStatsComponent : public UActorComponent
 {
@@ -34,6 +36,13 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	float GetDataValue(EStatsType Type);
+
+public:
+    UPROPERTY(BlueprintAssignable)
+    FOnStatValueChanged OnValueChanged;
+
+    UPROPERTY(BlueprintAssignable)
+    FOnStatValueChanged OnMaxValueChanged;
 	
 protected:
 	// Called when the game starts

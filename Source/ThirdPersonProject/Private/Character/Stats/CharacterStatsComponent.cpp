@@ -52,6 +52,8 @@ void UCharacterStatsComponent::ChangeStatMaxValue(EStatsType Type, float NewMaxV
 	FStatData& Data = Stats[Index];
 	Data.MaxValue = Index;
 	StatsToRecovery.AddUnique(&Data);
+
+    OnMaxValueChanged.Broadcast(Data.MaxValue, Data.Type);
 }
 
 void UCharacterStatsComponent::AddToRecoveryList(FStatData& Data)
@@ -84,6 +86,7 @@ void UCharacterStatsComponent::ChangeStatDataValue(FStatData& Data, float Delta)
     }
 
 	Data.Value = FMath::Clamp(Data.Value + Delta, Data.MinValue, Data.MaxValue);
+    OnValueChanged.Broadcast(Data.Value, Data.Type);
 
 	if (Data.RecoverySpeed > 0.0f)
 	{
