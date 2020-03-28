@@ -8,7 +8,7 @@ UCharacterStatsComponent::UCharacterStatsComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-    bIsActive = true;
+	SetActive(true);
 
 	for (uint8 I = 0; I < (uint8)EStatsType::Count; ++I)
 	{
@@ -22,7 +22,7 @@ UCharacterStatsComponent::UCharacterStatsComponent()
 void UCharacterStatsComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-    if (!bIsActive)
+    if (!IsActive())
     {
         return;
     }
@@ -78,7 +78,7 @@ void UCharacterStatsComponent::ChangeStatValue(FStatData& Data, float Delta)
 
 void UCharacterStatsComponent::ChangeStatDataValue(FStatData& Data, float Delta)
 {
-    if (!bIsActive)
+    if (!IsActive())
     {
         return;
     }

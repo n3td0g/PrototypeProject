@@ -56,15 +56,16 @@ void UTargetIndicatorComponent::TargetChanged(class UTargetComponent* NewTarget)
 {
 	if (IsValid(NewTarget))
 	{
-		bAbsoluteLocation = true;
-		bAbsoluteRotation = true;
+
+		SetUsingAbsoluteLocation(true);
+		SetUsingAbsoluteRotation(true);
 		SetComponentTickEnabled(true);
 		SetHiddenInGame(false, true);
 	}
 	else
 	{
-		bAbsoluteLocation = false;
-		bAbsoluteRotation = false;
+        SetUsingAbsoluteLocation(false);
+        SetUsingAbsoluteRotation(false);
 		
 		SetComponentTickEnabled(false);
 		SetHiddenInGame(true, true);
